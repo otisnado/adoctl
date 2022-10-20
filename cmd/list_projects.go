@@ -4,7 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/oncallejas/adoctl/api/project"
+	"github.com/otisnado/adoctl/api/project"
 	"github.com/spf13/cobra"
 )
 

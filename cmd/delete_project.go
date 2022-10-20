@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"github.com/google/uuid"
-	"github.com/oncallejas/adoctl/api/project"
+	"github.com/otisnado/adoctl/api/project"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

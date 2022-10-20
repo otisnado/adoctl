@@ -6,7 +6,7 @@ import (
 
 	"github.com/cheynewallace/tabby"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/core"
-	"github.com/oncallejas/adoctl/api"
+	"github.com/otisnado/adoctl/api"
 )
 
 func ListAllProcesses() {

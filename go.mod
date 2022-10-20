@@ -1,4 +1,4 @@
-module github.com/oncallejas/adoctl
+module github.com/otisnado/adoctl
 
 go 1.19
 
