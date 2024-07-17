@@ -2,10 +2,13 @@ package projects
 
 import (
 	"context"
+	"os"
 	"strconv"
+	"text/template"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
 	"github.com/otisnado/adoctl/api"
+	"github.com/otisnado/adoctl/templates"
 	"github.com/rodaine/table"
 )
 
@@ -44,5 +47,27 @@ func GetProjects() error {
 		table.Print()
 	}
 
+	return nil
+}
+
+func GetProjectById(id *string, capabilities *bool, history *bool) error {
+	var ctx context.Context
+	projectArgsIn := core.GetProjectArgs{
+		ProjectId:           id,
+		IncludeCapabilities: capabilities,
+		IncludeHistory:      history,
+	}
+
+	res, err := api.CoreClient().GetProject(ctx, projectArgsIn)
+	if err != nil {
+		return err
+	}
+
+	tmpl, err := template.New("project").Parse(templates.ProjectTemplate)
+	if err != nil {
+		panic(err)
+	}
+
+	tmpl.Execute(os.Stdout, *res)
 	return nil
 }
