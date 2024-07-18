@@ -2,6 +2,7 @@ package projects
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strconv"
 	"text/template"
@@ -12,8 +13,9 @@ import (
 	"github.com/rodaine/table"
 )
 
+var ctx context.Context
+
 func GetProjects() error {
-	var ctx context.Context
 	var projectArgsIn core.GetProjectsArgs
 
 	responseValue, err := api.CoreClient().GetProjects(ctx, projectArgsIn)
@@ -51,7 +53,6 @@ func GetProjects() error {
 }
 
 func GetProjectById(id *string, capabilities *bool, history *bool) error {
-	var ctx context.Context
 	projectArgsIn := core.GetProjectArgs{
 		ProjectId:           id,
 		IncludeCapabilities: capabilities,
@@ -69,5 +70,43 @@ func GetProjectById(id *string, capabilities *bool, history *bool) error {
 	}
 
 	tmpl.Execute(os.Stdout, *res)
+	return nil
+}
+
+func CreateProject(projectName string, projectDescription string, projectSourceControlSystem string, projectProcessTemplateId string, projectVisibility string) error {
+
+	visibility := core.ProjectVisibility(projectVisibility)
+
+	projectProcessTemplate := map[string]string{
+		"templateTypeId": projectProcessTemplateId,
+	}
+
+	projectVersionControl := map[string]string{
+		"sourceControlType": projectSourceControlSystem,
+	}
+
+	projectCapabilities := map[string]map[string]string{
+		"processTemplate": projectProcessTemplate,
+		"versioncontrol":  projectVersionControl,
+	}
+
+	TeamProjectToCreate := core.TeamProject{
+		Name:         &projectName,
+		Description:  &projectDescription,
+		Visibility:   &visibility,
+		Capabilities: &projectCapabilities,
+	}
+
+	queueProject := core.QueueCreateProjectArgs{
+		ProjectToCreate: &TeamProjectToCreate,
+	}
+
+	operationReference, err := api.CoreClient().QueueCreateProject(ctx, queueProject)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Project was created successfully, you can trace it with the following operation reference:", *operationReference.Id)
+
 	return nil
 }
