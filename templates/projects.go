@@ -1,6 +1,6 @@
 package templates
 
-var ProjectTemplate = `Id:             {{ .Id }}
+var TeamProjectYamlTemplate = `Id:             {{ .Id }}
 Name:           {{ .Name }}
 Abbreviation:   {{ .Abbreviation }}
 Description:    {{ .Description }}

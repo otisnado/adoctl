@@ -63,7 +63,7 @@ func GetProjectById(id *string, capabilities *bool, history *bool) error {
 		return err
 	}
 
-	tmpl, err := template.New("project").Parse(templates.ProjectTemplate)
+	tmpl, err := template.New("project").Parse(templates.TeamProjectYamlTemplate)
 	if err != nil {
 		panic(err)
 	}
