@@ -12,7 +12,10 @@ import (
 
 func CoreClient() core.Client {
 	organizationUrl := viper.GetString("organizationurl")
-	organizationToken := utils.DecodeStringBase64(viper.GetString("organizationtoken"))
+	organizationToken, err := utils.DecodeStringBase64(viper.GetString("organizationtoken"))
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	connection := azuredevops.NewPatConnection(organizationUrl, organizationToken)
 

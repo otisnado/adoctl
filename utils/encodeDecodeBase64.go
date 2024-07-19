@@ -7,7 +7,10 @@ func EncodeStringBase64(data string) string {
 	return encodedString
 }
 
-func DecodeStringBase64(data string) string {
-	decodedString, _ := base64.StdEncoding.DecodeString(data)
-	return string(decodedString)
+func DecodeStringBase64(data string) (string, error) {
+	decodedString, err := base64.StdEncoding.DecodeString(data)
+	if err != nil {
+		return "", err
+	}
+	return string(decodedString), nil
 }
