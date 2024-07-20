@@ -8,7 +8,7 @@ import (
 	"text/template"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
-	"github.com/otisnado/adoctl/api"
+	"github.com/otisnado/adoctl/api/clients"
 	"github.com/otisnado/adoctl/templates"
 	"github.com/rodaine/table"
 )
@@ -18,7 +18,7 @@ var ctx context.Context
 func GetProjects() error {
 	var projectArgsIn core.GetProjectsArgs
 
-	responseValue, err := api.CoreClient().GetProjects(ctx, projectArgsIn)
+	responseValue, err := clients.CoreClient().GetProjects(ctx, projectArgsIn)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func GetProjects() error {
 			projectsArgs := core.GetProjectsArgs{
 				ContinuationToken: &continuationToken,
 			}
-			responseValue, err = api.CoreClient().GetProjects(ctx, projectsArgs)
+			responseValue, err = clients.CoreClient().GetProjects(ctx, projectsArgs)
 			if err != nil {
 				return err
 			}
@@ -59,7 +59,7 @@ func GetProjectById(id *string, capabilities *bool, history *bool) error {
 		IncludeHistory:      history,
 	}
 
-	res, err := api.CoreClient().GetProject(ctx, projectArgsIn)
+	res, err := clients.CoreClient().GetProject(ctx, projectArgsIn)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func CreateProject(projectName string, projectDescription string, projectSourceC
 		ProjectToCreate: &TeamProjectToCreate,
 	}
 
-	operationReference, err := api.CoreClient().QueueCreateProject(ctx, queueProject)
+	operationReference, err := clients.CoreClient().QueueCreateProject(ctx, queueProject)
 	if err != nil {
 		return err
 	}
