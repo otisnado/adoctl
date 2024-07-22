@@ -3,10 +3,12 @@ package projects
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"text/template"
 
+	"github.com/google/uuid"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
 	"github.com/otisnado/adoctl/api/clients"
 	"github.com/otisnado/adoctl/templates"
@@ -109,4 +111,23 @@ func CreateProject(projectName string, projectDescription string, projectSourceC
 	fmt.Println("Project was created successfully, you can trace it with the following operation reference:", *operationReference.Id)
 
 	return nil
+}
+
+func DeleteProject(id string) {
+	projectId, err := uuid.Parse(id)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	projectArgs := core.QueueDeleteProjectArgs{
+		ProjectId: &projectId,
+	}
+
+	operationReference, err := clients.CoreClient().QueueDeleteProject(ctx, projectArgs)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println("Project was queued successfully, you can trace it with the following operation reference:", *operationReference.Id)
+
 }
