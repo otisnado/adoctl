@@ -131,3 +131,23 @@ func DeleteProject(id string) {
 	fmt.Println("Project was queued successfully, you can trace it with the following operation reference:", *operationReference.Id)
 
 }
+
+func GetProjectProperties(id string) {
+	projectId, err := uuid.Parse(id)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	projectPropertiesArgs := core.GetProjectPropertiesArgs{
+		ProjectId: &projectId,
+	}
+
+	projectProperties, err := clients.CoreClient().GetProjectProperties(ctx, projectPropertiesArgs)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for _, property := range *projectProperties {
+		fmt.Println(*property.Name, property.Value)
+	}
+}
