@@ -151,3 +151,36 @@ func GetProjectProperties(id string) {
 		fmt.Println(*property.Name, property.Value)
 	}
 }
+
+func UpdateProject(id string, name string, description string, visibility string) {
+	projectId, err := uuid.Parse(id)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var projectToUpdate core.TeamProject
+
+	if name != "" {
+		projectToUpdate.Name = &name
+	}
+
+	if description != "" {
+		projectToUpdate.Description = &description
+	}
+
+	if visibility != "" {
+		projectToUpdate.Visibility = (*core.ProjectVisibility)(&visibility)
+	}
+
+	updateProjectArgs := core.UpdateProjectArgs{
+		ProjectUpdate: &projectToUpdate,
+		ProjectId:     &projectId,
+	}
+
+	operationReference, err := clients.CoreClient().UpdateProject(ctx, updateProjectArgs)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println("Project was queued successfully, you can trace it with the following operation reference:", *operationReference.Id)
+}
