@@ -3,6 +3,7 @@ module github.com/otisnado/adoctl
 go 1.22.5
 
 require (
+	github.com/google/uuid v1.4.0
 	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.1.0
 	github.com/rodaine/table v1.2.0
 	github.com/spf13/cobra v1.8.1
@@ -11,7 +12,6 @@ require (
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/google/uuid v1.4.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
