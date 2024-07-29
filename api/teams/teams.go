@@ -3,9 +3,12 @@ package teams
 import (
 	"context"
 	"log"
+	"os"
+	"text/template"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7/core"
 	"github.com/otisnado/adoctl/api/clients"
+	"github.com/otisnado/adoctl/templates"
 	"github.com/rodaine/table"
 )
 
@@ -26,4 +29,29 @@ func GetTeams(projectId string) {
 	}
 
 	t.Print()
+}
+
+func GetTeamById(project_id string, team_id string) error {
+	projectId := project_id
+	teamId := team_id
+	expand := true
+	teamArgs1 := core.GetTeamArgs{
+		ProjectId:      &projectId,
+		TeamId:         &teamId,
+		ExpandIdentity: &expand,
+	}
+
+	team, err := clients.CoreClient().GetTeam(ctx, teamArgs1)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	tmpl, err := template.New("team").Parse(templates.TeamPrint)
+	if err != nil {
+		panic(err)
+	}
+
+	tmpl.Execute(os.Stdout, *team)
+	return nil
+
 }
