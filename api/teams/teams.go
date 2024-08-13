@@ -55,3 +55,27 @@ func GetTeamById(project_id string, team_id string) error {
 	return nil
 
 }
+
+func CreateTeam(teamName string, teamDescription string, projectId string) error {
+	team := core.WebApiTeam{
+		Name:        &teamName,
+		Description: &teamDescription,
+	}
+	createTeamArgs := core.CreateTeamArgs{
+		Team:      &team,
+		ProjectId: &projectId,
+	}
+
+	createdTeam, err := clients.CoreClient().CreateTeam(ctx, createTeamArgs)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	tmpl, err := template.New("team").Parse(templates.TeamPrint)
+	if err != nil {
+		panic(err)
+	}
+
+	tmpl.Execute(os.Stdout, *createdTeam)
+	return nil
+}
