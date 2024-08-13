@@ -2,6 +2,7 @@ package teams
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"text/template"
@@ -77,5 +78,20 @@ func CreateTeam(teamName string, teamDescription string, projectId string) error
 	}
 
 	tmpl.Execute(os.Stdout, *createdTeam)
+	return nil
+}
+
+func DeleteTeam(teamId string, projectId string) error {
+	teamToBeDeletedArgs := core.DeleteTeamArgs{
+		ProjectId: &projectId,
+		TeamId:    &teamId,
+	}
+
+	err := clients.CoreClient().DeleteTeam(ctx, teamToBeDeletedArgs)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Team with ", teamId, " was deleted successfully")
 	return nil
 }
